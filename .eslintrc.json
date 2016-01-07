@@ -1,0 +1,37 @@
+{
+    "rules": {
+        "indent": [
+            1,
+            4
+        ],
+        "quotes": [
+            1,
+            "double"
+        ],
+        "linebreak-style": [
+            2,
+            "windows"
+        ],
+        "semi": [
+            2,
+            "always"
+        ],
+        "no-console": 1,
+        "strict": [2, "global"],
+        "no-unused-vars": [2, {"vars": "local", "argsIgnorePattern": "^(_|([a-z]$))"}],
+        "no-var":2,
+        "camelcase":[2, {"properties": "always"}],
+        "curly":2,
+        "no-implied-eval":2
+    },
+    "env": {
+        "es6": true,
+        "node": true,
+        "amd": true
+    },
+    "ecmaFeatures": {
+        "modules": true,
+        "classes": true
+    },
+    "extends": "eslint:recommended"
+}

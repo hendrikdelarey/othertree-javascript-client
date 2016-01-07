@@ -1,3 +1,4 @@
 node_modules
 .tmp
 bower_components
+lib/bower_components
