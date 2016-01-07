@@ -1,0 +1,33 @@
+{
+  "name": "othertree-client",
+  "dependencies": {
+    "signalr": "~2.2.0",
+    "protobuf": "~5.0.1"
+  },
+  "devDependencies": {},
+  "authors": [
+    "nick cuthbert <nick@whereismytransport.com>"
+  ],
+  "description": "This library helps developers connect to and use an OtherTree instance",
+  "main": "./dist/othertree.min.js",
+  "moduleType": [
+    "amd",
+    "es6"
+  ],
+  "keywords": [
+    "OtherTree",
+    "IoT",
+    "EventProcessor",
+    "SignalR",
+    "Protobuf"
+  ],
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/OtherTree/othertree-javascript-client",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
