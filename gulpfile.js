@@ -67,7 +67,8 @@ gulp.task("clean", function (cb) {
 
 function compileJS(uglify) {
     var bundler = browserify("lib/othertree.js", { debug: true }).transform("babelify",{
-        presets: ["es2015"],plugins:["transform-es2015-modules-commonjs"]
+        presets: ["es2015"]
+        ,plugins:["transform-es2015-modules-commonjs"]
     }).transform(debowerify);
 
     var compileStream = bundler.bundle()
@@ -90,7 +91,7 @@ function compileJS(uglify) {
 
 
 gulp.task("compile", function () {
-    return compileJS(true).pipe($.sourcemaps.write("./")).pipe(gulp.dest("dist"));
+    return compileJS(false).pipe($.sourcemaps.write("./")).pipe(gulp.dest("dist"));
 });
 
 

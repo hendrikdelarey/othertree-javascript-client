@@ -1,0 +1,6 @@
+package wimt.routethink
+
+message Point {
+	 double latitude = 1;
+	 double longitude = 2;
+}
