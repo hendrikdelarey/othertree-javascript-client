@@ -48,15 +48,7 @@ gulp.task("lint", function () {
             extends: "eslint:recommended",
             ecmaFeatures: {
                 "modules": true
-            },
-            rules: {
-
-            },
-            globals: {
-                "jQuery": false,
-                "$": true,
-                "OtherTreeClient":true                
-            },
+            },          
             envs: [
                 "browser", "es6", "amd", "node"
             ]

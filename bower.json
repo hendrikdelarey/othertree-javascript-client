@@ -4,7 +4,9 @@
     "signalr": "~2.2.0",
     "protobuf": "~5.0.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "webcomponentsjs": "~0.7.20"
+  },
   "authors": [
     "nick cuthbert <nick@whereismytransport.com>"
   ],

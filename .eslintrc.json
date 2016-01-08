@@ -22,7 +22,11 @@
         "no-var":2,
         "camelcase":[2, {"properties": "always"}],
         "curly":2,
-        "no-implied-eval":2
+        "no-implied-eval":2        
+    }, 
+    "globals": {
+                "jQuery": false,
+                "$": true
     },
     "env": {
         "es6": true,
@@ -33,5 +37,5 @@
         "modules": true,
         "classes": true
     },
-    "extends": "eslint:recommended"
+    "extends": "eslint:recommended"    
 }
