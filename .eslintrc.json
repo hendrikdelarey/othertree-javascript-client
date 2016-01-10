@@ -20,13 +20,17 @@
         "strict": [2, "global"],
         "no-unused-vars": [2, {"vars": "local", "argsIgnorePattern": "^(_|([a-z]$))"}],
         "no-var":2,
+        "no-undef":1,
         "camelcase":[2, {"properties": "always"}],
         "curly":2,
         "no-implied-eval":2        
     }, 
     "globals": {
                 "jQuery": false,
-                "$": true
+                "$": true,
+                "draw":true,
+                "setup":true,
+                "path":true
     },
     "env": {
         "es6": true,
