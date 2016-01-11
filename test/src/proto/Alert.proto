@@ -1,0 +1,189 @@
+syntax = "proto3";
+
+package wimt.routethink;
+
+import "VehicleLocation.proto";
+
+message AlertSubscription {
+
+  Alert.MessagePriority minPriority = 1; 
+
+  repeated AlertMessage.MessageType types = 2; // defaults to all types
+
+  repeated Alert.Cause causes = 3; // defaults to all causes
+
+  repeated Alert.Effect effects = 4; // defaults to all effects
+
+  repeated EntitySelector entitySelectors = 5; // defaults to all alerts, everywhere
+}
+
+// Here you can select how you want your message filtered.
+// All the ids are the same as TransitApi ids.
+// Subscribe to alterts using the maxterm canonical form.
+message EntitySelector {
+
+  enum TransitMode {
+    // Any mode of transport that can not be classified into the modes of transport listed below.
+    UNDEFINED = 0;
+
+    // Any light rail or street level system within a metropolitan area.
+    LIGHT_RAIL = 1;
+
+    // Any underground rail system within a metropolitan area.
+    METRO = 2;
+
+    // Any rail system used for long-distance travel. Rail is high speed, passenger carrying cars operating on separate right of ways.
+    RAIL = 3;
+
+    // Short distance bus routes, typically within a metropolitan area.
+    BUS = 4;
+
+    // Short and long distance boat travels.
+    FERRY = 5;
+
+    // Used for street level cable cars where the cable runs beneath the car.
+    GROUND_CABLE_CAR = 6;
+
+    // Any suspended cable car where the car is suspended from the cable.
+    GONDOLA = 7;
+
+    // Any rail system designed for steep inclines.
+    FUNICULAR = 8;
+
+    // Long distance bus routes.
+    COACH = 9;
+
+    // Used for any air travel.
+    AIR = 10;
+  }
+
+   string agency_id = 1;
+   string trip_id = 4;
+   string stop_id = 5;
+   string line_id = 1000;
+   TransitMode transit_mode = 1001;
+   BoundingBox bounding_box = 1002;
+}
+
+message BoundingBox {
+   Point top_left_corner = 1;
+   Point bottom_right_corner = 2;
+}
+
+// An alert, indicating some sort of incident in the public transit network.
+message Alert {
+  // Cause of this alert.
+  enum Cause {
+    // Cause of alert is unknown
+    UNKNOWN_CAUSE = 0;
+
+    // Could be a general alert. Could also be a fare change alert to let the public know.
+    OTHER_CAUSE = 1;
+
+    // Technical issues are the cause of this alert
+    TECHNICAL_PROBLEM = 2;
+
+    // Public transit agency employees stopped working.
+    STRIKE = 3;
+
+    // People are blocking the streets.
+    DEMONSTRATION = 4;
+
+    // Accident happened and caused alert.
+    ACCIDENT = 5;
+
+    // Alert is due to holiday. Could be a "happy holidays" message, or a special.
+    HOLIDAY = 6;
+
+    // Alert is due to the weather.
+    WEATHER = 7;
+
+    // Maintenance on vehicles/station(s) is cause of Alert.
+    MAINTENANCE = 8;
+
+    // Construction effecting trips is cause of Alert.
+    CONSTRUCTION = 9;
+
+    // Police activity effecting trips is cause of Alert.
+    POLICE_ACTIVITY = 10;
+
+    // Medical emergency is cause of Alert.
+    MEDICAL_EMERGENCY = 11;
+  }
+
+  // What is the effect of this problem on the affected entity.
+  enum Effect {
+    // Agency is not running at all for specified time
+    NO_SERVICE = 0;
+
+    // Fewer trips are made for specified time
+    REDUCED_SERVICE = 1;
+
+    // We don't care about Insignificant delays: they are hard to detect, have
+    // little impact on the user, and would clutter the results as they are too
+    // frequent.
+    // Insignificant delays will be delivered through another subscription to
+    // alter the Estimated Time of Arrival [potential future feature]
+    SIGNIFICANT_DELAYS = 2;
+
+    // A detour is made for specified trips
+    DETOUR = 3;
+
+    // Additional vehicles are scheduled for trips for specified time
+    ADDITIONAL_SERVICE = 4;
+
+    // Trips are modified for specified time (could be due to concert, etc)
+    MODIFIED_SERVICE = 5;
+
+    // Other unknown effect on trips
+    OTHER_EFFECT = 6;
+
+    // Unknown effect
+    UNKNOWN_EFFECT = 7;
+
+    // Stop location is moved
+    STOP_MOVED = 8;
+  }
+
+  enum MessagePriority {
+    STANDARD = 0;
+    CRITICAL = 1; // Critical messages should be sent via SMS if available
+  }
+
+  // Time when the alert should be shown to the user. If missing, the
+  // alert will be shown as long as it appears in the feed.
+  // If multiple ranges are given, the alert will be shown during all of them.
+  repeated DateRange active_period = 1;
+
+  // Entities whose users we should notify of this alert.
+  repeated EntitySelector informed_entity = 5;
+
+   Cause cause = 6;
+   Effect effect = 7;
+
+  // List of human readable messages, it could have both twitter and facebook messages (that could differ due to twitter character limits)
+  repeated AlertMessage messages = 1000;
+
+  MessagePriority priority = 8;
+}
+
+// A time interval. The interval is considered active at time 't' if 't' is
+// greater than or equal to the start time and less than the end time.
+message DateRange {
+  // If missing, the interval starts at minus infinity.
+   string start_date = 1;
+
+  // If missing, the interval ends at plus infinity.
+   string end_date = 2;
+}
+
+message AlertMessage {
+  enum MessageType {
+    SHORT_MESSAGE = 0; // limited to 140 characters, good for SMS's and Twitter post
+    LONG_MESSAGE = 1;
+  }
+
+   MessageType type = 1;
+
+   string message = 3;
+}

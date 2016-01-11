@@ -19,7 +19,7 @@ var buffer = require("vinyl-buffer");
 var browserify = require("browserify");
 var debowerify = require("debowerify");
 var browserSync = require("browser-sync");
-var reload = browserSync.reload;
+var reload=browserSync.reload;
 // var merge = require("merge-stream");
 
 var DIST = "test/lib";
@@ -138,36 +138,38 @@ gulp.task("copy-lib", function () {
     return gulp.src(["./dist/**/*"]).pipe(gulp.dest(dist("")));
 });
 
-gulp.task("test-lib-setup",function(cb){
-    runSequence(["copy-lib"],cb);
+gulp.task("compile-and-copy",["default"], function () {
+    return gulp.src(["./dist/**/*"]).pipe(gulp.dest(dist("")));
 });
-
     
-
-// Watch files for changes & reload
-gulp.task("serve:test", ["test-lib-setup"], function () {    
+    
+gulp.task("serve:test", ["default","copy-lib","test:sync"],function () {        
+    gulp.watch("lib/**/*",["compile-and-copy"]);    
+});
+gulp.task("test:sync", function () {
     browserSync({
         port: 5000,
-        notify: true,
-        logPrefix: "PSK",
-        snippetOptions: {
-            rule: {
-                match: "<span id=\"browser-sync-binding\"></span>",
-                fn: function (snippet) {
-                    return snippet;
-                }
-            }
-        },
+        notify: false,        
+        // snippetOptions: {
+        //     rule: {
+        //         match: "<span id=\"browser-sync-binding\"></span>",
+        //         fn: function (snippet) {
+        //             return snippet;
+        //         }
+        //     }
+        // },        
+        files:["test/**/*"],    
+        sourcemap: true,
         // Run as an https by uncommenting 'https: true'
         // Note: this uses an unsigned certificate which on first access
         //       will present a certificate warning in the browser.
-        // https: true,
+        // https: true,.
         server: {
-            baseDir: ["test"]            
+            baseDir: "test"            
         }              
-    });
-    gulp.watch(["test/**/*"], reload);
-    gulp.watch(["dist/**/*"], "test-lib-setup",reload);
-    
-    
+    }).watch("test/**/*").on("change",reload);    
 });
+   
+    
+// Watch files for changes & reload
+// gulp.task("serve:test", ["default"], "test:watch");
