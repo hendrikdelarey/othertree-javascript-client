@@ -5,7 +5,7 @@
   "requireLicenseAcceptance": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/username/repository.git"
+    "url": "git://github.com/OtherTree/othertree-javascript-client.git"
   },
   "license": "Apache-2.0",
   "private": false,
