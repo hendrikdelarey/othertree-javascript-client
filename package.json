@@ -1,6 +1,6 @@
 {
   "name": "othertree-client",
-  "version": "1.0.0-alpha1",
+  "version": "1.0.0-alpha2",
   "description": "This library helps developers connect and use an OtherTree instance",
   "requireLicenseAcceptance": true,
   "repository": {
