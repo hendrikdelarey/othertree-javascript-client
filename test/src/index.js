@@ -13,25 +13,28 @@ requirejs(["../lib/othertree.min.js"], function(otherTree) {
     };
     
    window.client=new otherTree.OtherTreeClient("http://othertree-dev-cloudservice.cloudapp.net:8080",guid(),true);        
-   var s = function( p ) {
-
-        var x = 100; 
-        var y = 100;
-        
-        p.setup = function() {
-            p.createCanvas(p.windowWidth,p.windowHeight);            
-            otherTree.OtherTreeType.createTypesFromProtoFileAsync("wimt.routethink",["AlertSubscription","Alert","EntitySelector","AlertMessage","BoundingBox","Point"],"src/proto/Alert.proto",
+                       
+    otherTree.OtherTreeType.createTypesFromProtoFileAsync("wimt.routethink",["AlertSubscription","Alert","EntitySelector","AlertMessage","BoundingBox","Point"],"src/proto/Alert.proto",
                 function(type){
                     window.client.addOnThudListener(type.Alert,function(alert){
                         console.log("Received alert");
+                        var last=document.getElementById("lastMessage");
+                        if (last.innerHTML==="<em>No messages currently available</em>"){
+                            last.innerHTML=alert.messages[0].message;                   
+                        }else{
+                            last.innerHTML+="<br/>"+alert.messages[0].message;
+                        }     
                         console.log(alert.messages[0].message);
                     });
                     var charge=new type.AlertSubscription();
                     var selector=new type.EntitySelector();
-                    selector.set_agency_id("Jammie");                    
+                    selector.set_agency_id("Jammie");
                     charge.entitySelectors.push(selector);                    
                     window.client.connect(function(){
                         console.log("connected");
+                        var status=document.getElementById("connection-status");
+                        status.className="connected";
+                        status.innerText="Connected";
                         window.client.charge(charge,function(c){                                                    
                             console.log("Charged");
                         },function(e){
@@ -39,6 +42,9 @@ requirejs(["../lib/othertree.min.js"], function(otherTree) {
                             console.log(e);
                         });
                     }, function(){
+                        var status=document.getElementById("connection-status");
+                        status.className="not-connected";
+                        status.innerText="Failed to connect";
                         console.log("failed to connect");
                     });
 
@@ -46,22 +52,7 @@ requirejs(["../lib/othertree.min.js"], function(otherTree) {
                 },function(e){
                     console.log("failed creating proto type");
                     console.log(e);
-                });
-        };
-
-
-        p.draw = function() {
-            p.background(0, 100, 200);
-            p.fill(255);
-            p.rect(x,y,50,50);
-        };
-        
-        p.windowResized=function(){
-              p.resizeCanvas(p.windowWidth, p.windowHeight);
-        };
-    };
-
-    var myp5 = new p5(s);    
+        });       
 });
 
 
